@@ -1,8 +1,3 @@
-
-PRATHMESH JOMDE <prathmjomde@gmail.com>
-Tue, Feb 6, 11:59 AM (22 hours ago)
-to me
-
 #include<iostream>
 using namespace std;
 
@@ -11,6 +6,7 @@ struct node{
     public:
         int data;
         node*next;
+
 }*hashtable[10];
 
 class hashg{
@@ -72,7 +68,7 @@ class hashg{
 
         }
     }
-   /* int search_ele(int val)
+    int search_ele(int val)
     {
         bool flag=0;
         int hash_val=hashfunction(val);
@@ -84,12 +80,40 @@ class hashg{
             {
                 cout<<hash_val<<":"<<temp->data<<endl;
                 flag=1;
+                
             }
             temp=temp->next;
+            if(!flag)
+            return -1;
+       
         }
-            //if(!flag)
-            //return -1;
-    }*/
+             return 0;
+        
+    }
+    void del_ele(int val)
+    {
+        int hash_val=hashfunction(val);
+        node*temp=hashtable[hash_val];
+        
+            if(temp==NULL)
+            {
+            cout<<"No element found"<<endl;
+            return;
+            }
+            else if(temp->data==val)
+            {
+                hashtable[hash_val]=temp->next;
+                return;
+            }
+            while((temp->next)->data!=val)
+            {
+                temp=temp->next;
+            }
+            temp->next=temp->next->next;
+            
+       }
+    	
+
 };
 int main()
 {
@@ -99,9 +123,11 @@ int main()
     do{
         cout<<"---------Menu----------"<<endl;
         cout<<"1.insert\n";
-         cout<<"2.display\n";
-         cout<<"3.search\n";
-         cout<<"4.exit\n";
+         cout<<"2.display\n"; 
+         cout<<"3.search\n"; 
+           cout<<"4.delete\n"; 
+         cout<<"5.exit\n"; 
+         
          cout<<"Enter your choice: ";
         cin>>ch;
         switch(ch)
@@ -123,10 +149,18 @@ int main()
                 continue;
             }
             break;
+
+
             case 4:
+            cout<<"Enter the ele to be deleted"<<endl;
+            cin>>del;
+            h.del_ele(del);
+            cout<<"ele delted"<<endl;
+            break;
+            case 5:
             cout<<"Thank you!"<<endl;
-           
+            
         }
-    }while(ch!=4);
+    }while(ch!=5);
 
 }
