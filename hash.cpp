@@ -1,0 +1,132 @@
+
+PRATHMESH JOMDE <prathmjomde@gmail.com>
+Tue, Feb 6, 11:59 AM (22 hours ago)
+to me
+
+#include<iostream>
+using namespace std;
+
+
+struct node{
+    public:
+        int data;
+        node*next;
+}*hashtable[10];
+
+class hashg{
+    public:
+    hashg()
+    {
+        for(int i=0;i<10;i++)
+        {
+            hashtable[i]=NULL;
+        }
+    }
+    int hashfunction(int val)
+    {
+        return (val%10);
+    }
+
+    node*create_node(int x)
+    {
+        node*newnode=new(node);
+        newnode->next=NULL;
+        newnode->data=x;
+        return newnode;
+    }
+
+    void disp()
+    {
+        for(int i=0;i<10;i++)
+        {
+            node*temp=new(node);
+            temp=hashtable[i];
+            cout<<"a["<<i<<"] :";
+            while(temp!=NULL)
+            {
+                cout<<"->"<<temp->data;
+                temp=temp->next;
+            }
+            cout<<endl;
+        }
+    }
+
+    void insert_val(int val)
+    {
+        int hash_val=hashfunction(val);
+        node*temp=new(node);
+        node*head=new(node);
+        head=create_node(val);
+        temp=hashtable[hash_val];
+        if(temp==NULL)
+        {
+            hashtable[hash_val]=head;
+        }
+        else
+        {
+            while(temp->next=NULL)
+            {
+                temp=temp->next;
+            }
+            temp->next=head;
+
+        }
+    }
+   /* int search_ele(int val)
+    {
+        bool flag=0;
+        int hash_val=hashfunction(val);
+        node*temp=hashtable[hash_val];
+        cout<<"Element found at: "<<endl;
+        while(temp!=NULL)
+        {
+            if(temp->data==val)
+            {
+                cout<<hash_val<<":"<<temp->data<<endl;
+                flag=1;
+            }
+            temp=temp->next;
+        }
+            //if(!flag)
+            //return -1;
+    }*/
+};
+int main()
+{
+    int ch;
+    int data,search,del;
+    hashg h;
+    do{
+        cout<<"---------Menu----------"<<endl;
+        cout<<"1.insert\n";
+         cout<<"2.display\n";
+         cout<<"3.search\n";
+         cout<<"4.exit\n";
+         cout<<"Enter your choice: ";
+        cin>>ch;
+        switch(ch)
+        {
+            case 1:
+            cout<<"Enter the phone no.to insert"<<endl;
+            cin>>data;
+            h.insert_val(data);
+            break;
+            case 2:
+            h.disp();
+            break;
+            case 3:
+            cout<<"Element to be searched: ";
+            cin>>search;
+            if(h.search_ele(search)==-1)
+            {
+                cout<<"No ele for"<<endl;
+                continue;
+            }
+            break;
+            case 4:
+            cout<<"Thank you!"<<endl;
+           
+        }
+    }while(ch!=4);
+
+}
