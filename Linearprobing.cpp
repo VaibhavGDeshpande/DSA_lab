@@ -47,7 +47,6 @@ public:
         else
         {
             int k;
-            hash_val++;
             while(temp!=NULL)
             {
                 hash_val++;
