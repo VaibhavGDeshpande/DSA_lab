@@ -1,151 +1,189 @@
+
 #include <iostream>
+#include <cstring>
 using namespace std;
-
-struct node
+class HashFunction
 {
-public:
-    int data;
-    node *next;
-
-} *hashtable[10];
-
-class hashg
-{
-public:
-    hashg()
+    typedef struct hash
     {
-        for (int i = 0; i < 10; i++)
+        long key;
+        char name[10];
+    } hash;
+    hash h[10];
+
+public:
+    HashFunction();
+    void insert();
+    void display();
+    int find(long);
+    void Delete(long);
+};
+HashFunction::HashFunction()
+{
+    int i;
+    for (i = 0; i < 10; i++)
+    {
+        h[i].key = -1;
+        strcpy(h[i].name, "NULL");
+    }
+}
+void HashFunction::Delete(long k)
+{
+    int index = find(k);
+    if (index == -1)
+    {
+        cout << "\n\tKey Not Found";
+    }
+    else
+    {
+        h[index].key = -1;
+        strcpy(h[index].name, "NULL");
+        cout << "\n\tKey is Deleted";
+    }
+}
+int HashFunction::find(long k)
+{
+    int i;
+    for (i = 0; i < 10; i++)
+    {
+        if (h[i].key == k)
         {
-            hashtable[i] = NULL;
+            cout << "\n\t" << h[i].key << " is Found at " << i << " Location With Name " << h[i].name;
+            return i;
         }
     }
-    int hashfunction(int val)
+    if (i == 10)
     {
-        return (val % 10);
+        return -1;
     }
-
-    node *create_node(int x)
+}
+void HashFunction::display()
+{
+    int i;
+    cout << "\n\t\tKey\t\tName";
+    for (i = 0; i < 10; i++)
     {
-        node *newnode = new (node);
-        newnode->next = NULL;
-        newnode->data = x;
-        return newnode;
+        cout << "\n\th[" << i << "]\t" << h[i].key << "\t\t" << h[i].name;
     }
-
-
-    void linearprobing(int val)
-    {
-        int hash_val = hashfunction(val);
-        node *temp = new (node);
-        node *head = new (node);
-        head = create_node(val);
-        temp = hashtable[hash_val];
-        if (temp == NULL)
+}
+void HashFunction::insert()
+{
+    char ans, n[10], ntemp[10];
+    long k, temp;
+    int v, hi, cnt = 0, flag = 0, i;
+    
+        if (cnt >= 10)
         {
-            hashtable[hash_val] = head;
+            cout << "\n\tHash Table is FULL";
+            
+        }
+        cout << "\n\tEnter a Telephone No: ";
+        cin >> k;
+        cout << "\n\tEnter a Client Name: ";
+        cin >> n;
+        hi = k % 10; // hash function
+        if (h[hi].key == -1)
+        {
+            h[hi].key = k;
+            strcpy(h[hi].name, n);
         }
         else
         {
-            int k;
-            while(temp!=NULL)
+            if (h[hi].key % 10 != hi)
             {
-                hash_val++;
-                k=hash_val%10;
-                temp=hashtable[k];
+                temp = h[hi].key;
+                strcpy(ntemp, h[hi].name);
+                h[hi].key = k;
+                strcpy(h[hi].name, n);
+                for (i = hi + 1; i < 10; i++)
+                {
+                    if (h[i].key == -1)
+                    {
+                        h[i].key = temp;
+                        strcpy(h[i].name, ntemp);
+                        flag = 1;
+                        break;
+                    }
+                }
+                for (i = 0; i < hi && flag == 0; i++)
+                {
+                    if (h[i].key == -1)
+                    {
+                        h[i].key = temp;
+                        strcpy(h[i].name, ntemp);
+                        break;
+                    }
+                }
             }
-            hashtable[(hash_val)%10]=head;
-        }
-    }
-
-    int search_ele(int val)
-    {
-        bool flag = 0;
-        int hash_val = hashfunction(val);
-        node *temp = hashtable[hash_val];
-        cout << "Element found at: " << endl;
-        while (temp != NULL)
-        {
-            if (temp->data == val)
+            else
             {
-                cout << hash_val << ":" << temp->data << endl;
-                flag = 1;
+                for (i = hi + 1; i < 10; i++)
+                {
+                    if (h[i].key == -1)
+                    {
+                        h[i].key = k;
+                        strcpy(h[i].name, n);
+                        flag = 1;
+                        break;
+                    }
+                }
+                for (i = 0; i < hi && flag == 0; i++)
+                {
+                    if (h[i].key == -1)
+                    {
+                        h[i].key = k;
+                        strcpy(h[i].name, n);
+                        break;
+                    }
+                }
             }
-            temp = temp->next;
-            if (!flag)
-                return -1;
         }
-        return 0;
-    }
-
-    // void del_ele(int val)
-    // {
-       
-      
-    
-    // }
-
-    
-    void disp()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            node *temp = new (node);
-            temp = hashtable[i];
-            cout << "a[" << i << "] :";
-            while (temp != NULL)
-            {
-                cout << "->" << temp->data;
-                temp = temp->next;
-            }
-            cout << endl;
-        }
-    }
-};
+        flag = 0;
+        cnt++;
+        
+}
 int main()
 {
-    int ch;
-    int data, search, del;
-    hashg h;
+    long k;
+    int ch, index;
+    char ans;
+    HashFunction obj;
+    cout << "\n\t***** Telephone (ADT) *****";
     do
     {
-        cout << "---------Menu----------" << endl;
-        cout << "1.linearprobing" << endl;
-        cout << "2.display\n";
-        cout << "3.search\n";
-        cout << "4.delete\n";
-        cout << "5.exit\n";
+        cout<<endl;
+        cout<<"<----------------------------------------------------->";
 
-        cout << "Enter your choice: ";
+        cout << "\n\t1. Insert\n\t2. Display\n\t3. Find\n\t4. Delete\n\t5. Exit";
+        cout << "\n\t.... Enter Your Choice: ";
         cin >> ch;
+        cout<<endl;
+        cout<<"<----------------------------------------------------->"<<endl;
+
         switch (ch)
         {
         case 1:
-            cout << "Enter the phone no.to insert" << endl;
-            cin >> data;
-            h.linearprobing(data);
+            obj.insert();
             break;
         case 2:
-            h.disp();
+            obj.display();
             break;
         case 3:
-            cout << "Element to be searched: ";
-            cin >> search;
-            if (h.search_ele(search) == -1)
+            cout << "\n\tEnter a Key Which You Want to Search: ";
+            cin >> k;
+            index = obj.find(k);
+            if (index == -1)
             {
-                cout << "No ele for" << endl;
-                continue;
+                cout << "\n\tKey Not Found";
             }
             break;
-        // case 4:
-        //     cout << "Enter the ele to be deleted" << endl;
-        //     cin >> del;
-        //     h.del_ele(del);
-        //     cout << "ele delted" << endl;
-        //     break;
+        case 4:
+            cout << "\n\tEnter a Key Which You Want to Delete: ";
+            cin >> k;
+            obj.Delete(k);
+            break;
         case 5:
-            cout << "Thank you!" << endl;
-        
-           
+            break;
         }
-    } while (ch != 5);
+    }while(ch!=5);
 }
